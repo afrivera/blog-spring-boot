@@ -5,8 +5,10 @@ import com.afrivera.blog.entity.Publicacion;
 import com.afrivera.blog.exceptions.ResourceNotFoundException;
 import com.afrivera.blog.repository.PublicacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,10 +31,12 @@ public class PublicacionServiceImpl implements PublicacionService {
     }
 
     @Override
-    public List<PublicacionDto> obtenerTodasPublicaciones() {
-        List<Publicacion> publicaciones = publicacionRepository.findAll();
+    public List<PublicacionDto> obtenerTodasPublicaciones(int numeroPagina, int medidaPagina) {
+        Pageable pageable = PageRequest.of(numeroPagina, medidaPagina);
+        Page<Publicacion> publicaciones = publicacionRepository.findAll(pageable);
+        List<Publicacion> listaPublicaciones = publicaciones.getContent();
 
-        return publicaciones.stream().map(publicacion -> mapearDTO(publicacion)).collect(Collectors.toList());
+        return listaPublicaciones.stream().map(publicacion -> mapearDTO(publicacion)).collect(Collectors.toList());
     }
 
     @Override

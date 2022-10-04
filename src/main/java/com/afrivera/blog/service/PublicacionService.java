@@ -8,7 +8,7 @@ public interface PublicacionService {
 
     public PublicacionDto crearPublicacion(PublicacionDto publicacionDto);
 
-    public List<PublicacionDto> obtenerTodasPublicaciones();
+    public List<PublicacionDto> obtenerTodasPublicaciones(int numeroPagina, int medidaPagina);
 
     public PublicacionDto obtenerPublicacionPorId(long id);
 
