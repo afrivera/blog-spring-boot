@@ -1,14 +1,14 @@
 package com.afrivera.blog.service;
 
 import com.afrivera.blog.dto.PublicacionDto;
+import com.afrivera.blog.dto.PublicacionResponse;
 
-import java.util.List;
 
 public interface PublicacionService {
 
     public PublicacionDto crearPublicacion(PublicacionDto publicacionDto);
 
-    public List<PublicacionDto> obtenerTodasPublicaciones(int numeroPagina, int medidaPagina);
+    public PublicacionResponse obtenerTodasPublicaciones(int numeroPagina, int medidaPagina, String ordenarPor, String sortDir);
 
     public PublicacionDto obtenerPublicacionPorId(long id);
 

@@ -1,13 +1,13 @@
 package com.afrivera.blog.controller;
 
 import com.afrivera.blog.dto.PublicacionDto;
+import com.afrivera.blog.dto.PublicacionResponse;
 import com.afrivera.blog.service.PublicacionService;
+import com.afrivera.blog.util.AppConstantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/publicaciones")
@@ -17,8 +17,12 @@ public class PublicacionController {
     private PublicacionService publicacionService;
 
     @GetMapping
-    public List<PublicacionDto> listarPublicaciones(@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int numeroPagina, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int medidaPagina) {
-        return publicacionService.obtenerTodasPublicaciones(numeroPagina, medidaPagina);
+    public PublicacionResponse listarPublicaciones(
+            @RequestParam(value = "pageNumber", defaultValue = AppConstantes.NUMERO_DE_PAGINA_POR_DEFECTO, required = false) int numeroPagina,
+            @RequestParam(value = "pageSize", defaultValue = AppConstantes.MEDIDA_DE_PAGINA_POR_DEFECTO, required = false) int medidaPagina,
+            @RequestParam(value = "sortBy", defaultValue = AppConstantes.ORDENAR_POR_DEFECTO, required = false) String ordenarPor,
+            @RequestParam(value = "sortDir", defaultValue = AppConstantes.ORDENAR_DIRECCION_POR_DEFECTO, required = false) String sortDir) {
+        return publicacionService.obtenerTodasPublicaciones(numeroPagina, medidaPagina, ordenarPor, sortDir);
     }
 
     @GetMapping("/{id}")
