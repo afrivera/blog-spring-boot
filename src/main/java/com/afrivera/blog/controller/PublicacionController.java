@@ -16,11 +16,6 @@ public class PublicacionController {
     @Autowired
     private PublicacionService publicacionService;
 
-    @PostMapping
-    public ResponseEntity<PublicacionDto> savePublicacion(@RequestBody PublicacionDto publicacionDto){
-        return new ResponseEntity<>(publicacionService.crearPublicacion(publicacionDto), HttpStatus.CREATED);
-    }
-
     @GetMapping
     public List<PublicacionDto> listarPublicaciones(){
         return publicacionService.obtenerTodasPublicaciones();
@@ -29,5 +24,23 @@ public class PublicacionController {
     @GetMapping("/{id}")
     public ResponseEntity<PublicacionDto> obtenerPublicacionPorId(@PathVariable(name = "id") long id){
         return ResponseEntity.ok(publicacionService.obtenerPublicacionPorId(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<PublicacionDto> savePublicacion(@RequestBody PublicacionDto publicacionDto){
+        return new ResponseEntity<>(publicacionService.crearPublicacion(publicacionDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PublicacionDto> actualizarPublicacion(@RequestBody PublicacionDto publicacionDto, @PathVariable(name = "id") long id){
+        PublicacionDto publicacionRespuesta = publicacionService.actualizarPublicacion(publicacionDto, id);
+
+        return new ResponseEntity<>(publicacionRespuesta, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> eliminarPublicacion(@PathVariable(name = "id") long id){
+        publicacionService.eliminarPublicacion(id);
+        return new ResponseEntity<String>("Publicacion Eliminada con exito", HttpStatus.OK);
     }
 }

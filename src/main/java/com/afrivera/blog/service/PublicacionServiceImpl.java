@@ -6,12 +6,13 @@ import com.afrivera.blog.exceptions.ResourceNotFoundException;
 import com.afrivera.blog.repository.PublicacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PublicacionServiceImpl implements PublicacionService{
+public class PublicacionServiceImpl implements PublicacionService {
 
     @Autowired
     private PublicacionRepository publicacionRepository;
@@ -37,12 +38,33 @@ public class PublicacionServiceImpl implements PublicacionService{
     @Override
     public PublicacionDto obtenerPublicacionPorId(long id) {
         Publicacion publicacion = publicacionRepository
-                .findById(id).orElseThrow(()-> new ResourceNotFoundException("Publicacion", "id", id));
+                .findById(id).orElseThrow(() -> new ResourceNotFoundException("Publicacion", "id", id));
         return mapearDTO(publicacion);
     }
 
+    @Override
+    public PublicacionDto actualizarPublicacion(PublicacionDto publicacionDto, long id) {
+        Publicacion publicacion = publicacionRepository
+                .findById(id).orElseThrow(() -> new ResourceNotFoundException("Publicacion", "id", id));
+
+        publicacion.setTitle(publicacionDto.getTitle());
+        publicacion.setDescription(publicacionDto.getDescription());
+        publicacion.setContent(publicacionDto.getContent());
+
+        Publicacion publicacionActualizada = publicacionRepository.save(publicacion);
+        return mapearDTO(publicacionActualizada);
+    }
+
+    @Override
+    public void eliminarPublicacion(long id) {
+        Publicacion publicacion = publicacionRepository
+                .findById(id).orElseThrow(()-> new ResourceNotFoundException("Publicacion", "id", id));
+
+        publicacionRepository.delete(publicacion);
+    }
+
     // Convierte entidad a DTO
-    private PublicacionDto mapearDTO(Publicacion publicacion){
+    private PublicacionDto mapearDTO(Publicacion publicacion) {
         PublicacionDto publicacionDto = new PublicacionDto();
 
         publicacionDto.setId(publicacion.getId());
@@ -54,7 +76,7 @@ public class PublicacionServiceImpl implements PublicacionService{
     }
 
     // convierte de DTO a Entidad
-     private Publicacion mapearEntidad(PublicacionDto publicacionDto){
+    private Publicacion mapearEntidad(PublicacionDto publicacionDto) {
         Publicacion publicacion = new Publicacion();
 
         publicacion.setId(publicacionDto.getId());
@@ -64,6 +86,5 @@ public class PublicacionServiceImpl implements PublicacionService{
 
         return publicacion;
     }
-
 
 }
