@@ -2,6 +2,8 @@ package com.afrivera.blog.entity;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "publicaciones", uniqueConstraints = {@UniqueConstraint(columnNames = {"title"})})
@@ -19,6 +21,9 @@ public class Publicacion {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comentario> comentarios = new HashSet<>();
 
     public Publicacion() {
     }
