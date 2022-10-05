@@ -10,4 +10,5 @@ public interface ComentarioService {
     public List<ComentarioDto> obtenerComentarioPorPublicacionId(long publicacionId);
     public ComentarioDto obtenerComentarioPorId(Long publicacionId, Long comentarioId);
     public ComentarioDto actualizarComentario(Long publicacionId, Long comentarioId, ComentarioDto solicitudComentario);
+    public void eliminarComentario(Long publicacionId, Long comentarioId);
 }
