@@ -5,6 +5,7 @@ import com.afrivera.blog.dto.PublicacionResponse;
 import com.afrivera.blog.entity.Publicacion;
 import com.afrivera.blog.exceptions.ResourceNotFoundException;
 import com.afrivera.blog.repository.PublicacionRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class PublicacionServiceImpl implements PublicacionService {
 
+    @Autowired
+    private ModelMapper modelMapper;
     @Autowired
     private PublicacionRepository publicacionRepository;
 
@@ -84,25 +87,13 @@ public class PublicacionServiceImpl implements PublicacionService {
 
     // Convierte entidad a DTO
     private PublicacionDto mapearDTO(Publicacion publicacion) {
-        PublicacionDto publicacionDto = new PublicacionDto();
-
-        publicacionDto.setId(publicacion.getId());
-        publicacionDto.setTitle(publicacion.getTitle());
-        publicacionDto.setDescription(publicacion.getDescription());
-        publicacionDto.setContent(publicacion.getContent());
-
+        PublicacionDto publicacionDto = modelMapper.map(publicacion, PublicacionDto.class);
         return publicacionDto;
     }
 
     // convierte de DTO a Entidad
     private Publicacion mapearEntidad(PublicacionDto publicacionDto) {
-        Publicacion publicacion = new Publicacion();
-
-        publicacion.setId(publicacionDto.getId());
-        publicacion.setTitle(publicacionDto.getTitle());
-        publicacion.setDescription(publicacionDto.getDescription());
-        publicacion.setContent(publicacionDto.getContent());
-
+        Publicacion publicacion = modelMapper.map(publicacionDto, Publicacion.class);
         return publicacion;
     }
 

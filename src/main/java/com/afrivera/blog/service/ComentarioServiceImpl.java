@@ -7,6 +7,7 @@ import com.afrivera.blog.exceptions.BlogAppException;
 import com.afrivera.blog.exceptions.ResourceNotFoundException;
 import com.afrivera.blog.repository.ComentarioRepository;
 import com.afrivera.blog.repository.PublicacionRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 @Service
 public class ComentarioServiceImpl implements ComentarioService{
 
+    @Autowired
+    ModelMapper modelMapper;
     @Autowired
     private ComentarioRepository comentarioRepository;
 
@@ -97,22 +100,12 @@ public class ComentarioServiceImpl implements ComentarioService{
     }
 
     private ComentarioDto mapearDto(Comentario comentario){
-        ComentarioDto comentarioDto = new ComentarioDto();
-        comentarioDto.setId(comentario.getId());
-        comentarioDto.setNombre(comentario.getNombre());
-        comentarioDto.setEmail(comentario.getEmail());
-        comentarioDto.setCuerpo(comentario.getCuerpo());
-
+        ComentarioDto comentarioDto = modelMapper.map(comentario, ComentarioDto.class);
         return comentarioDto;
     }
 
     private Comentario mapearEntidad(ComentarioDto comentarioDto){
-        Comentario comentario = new Comentario();
-        comentario.setId(comentarioDto.getId());
-        comentario.setNombre(comentarioDto.getNombre());
-        comentario.setEmail(comentarioDto.getEmail());
-        comentario.setCuerpo(comentarioDto.getCuerpo());
-
+        Comentario comentario = modelMapper.map(comentarioDto, Comentario.class);
         return comentario;
     }
 }
