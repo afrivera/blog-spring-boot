@@ -1,5 +1,9 @@
 package com.afrivera.blog.dto;
 
+import com.afrivera.blog.entity.Comentario;
+
+import java.util.Set;
+
 public class ComentarioDto {
 
     private Long id;
@@ -41,4 +45,5 @@ public class ComentarioDto {
     public void setCuerpo(String cuerpo) {
         this.cuerpo = cuerpo;
     }
+
 }

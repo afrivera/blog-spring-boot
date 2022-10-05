@@ -1,11 +1,16 @@
 package com.afrivera.blog.dto;
 
+import com.afrivera.blog.entity.Comentario;
+
+import java.util.Set;
+
 public class PublicacionDto {
 
     private Long id;
     private String title;
     private String description;
     private String content;
+    private Set<Comentario> comentarios;
 
     public Long getId() {
         return id;
@@ -37,5 +42,13 @@ public class PublicacionDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(Set<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 }
