@@ -3,10 +3,12 @@ package com.afrivera.blog.service;
 import com.afrivera.blog.dto.ComentarioDto;
 import com.afrivera.blog.entity.Comentario;
 import com.afrivera.blog.entity.Publicacion;
+import com.afrivera.blog.exceptions.BlogAppException;
 import com.afrivera.blog.exceptions.ResourceNotFoundException;
 import com.afrivera.blog.repository.ComentarioRepository;
 import com.afrivera.blog.repository.PublicacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +46,18 @@ public class ComentarioServiceImpl implements ComentarioService{
 
     @Override
     public ComentarioDto obtenerComentarioPorId(Long publicacionId, Long comentarioId) {
-        return null;
+        Publicacion publicacion = publicacionRepository
+                .findById(publicacionId)
+                .orElseThrow(()->new ResourceNotFoundException("Publicacion", "id", publicacionId));
+
+        Comentario comentario = comentarioRepository.findById(comentarioId)
+                .orElseThrow(()-> new ResourceNotFoundException("Comentario", "id", comentarioId));
+
+        if (!comentario.getPublicacion().getId().equals(publicacion.getId())) {
+            throw new BlogAppException(HttpStatus.BAD_REQUEST, "El comentario no pertenece a la publicacion");
+        }
+
+        return mapearDto(comentario);
     }
 
     private ComentarioDto mapearDto(Comentario comentario){

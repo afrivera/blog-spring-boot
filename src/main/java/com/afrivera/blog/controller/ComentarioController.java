@@ -25,7 +25,16 @@ public class ComentarioController {
     }
 
     @GetMapping("/publicaciones/{publicacionId}/comentarios")
-    public List<ComentarioDto> listarComentariosPorPublicacionId(@PathVariable(value = "publicacionId") long publicacionId ){
+    public List<ComentarioDto> listarComentariosPorPublicacionId(@PathVariable(value = "publicacionId") Long publicacionId ){
         return comentarioService.obtenerComentarioPorPublicacionId(publicacionId);
+    }
+
+    @GetMapping("/publicaciones/{publicacionId}/comentarios/{comentarioId}")
+    public ResponseEntity<ComentarioDto> obtenerComentarioById(
+            @PathVariable(value = "publicacionId") long publicacionId,
+            @PathVariable(value = "comentarioId") long comentarioId
+    ){
+        ComentarioDto comentarioDto = comentarioService.obtenerComentarioPorId(publicacionId, comentarioId);
+        return new ResponseEntity<>(comentarioDto, HttpStatus.OK);
     }
 }
