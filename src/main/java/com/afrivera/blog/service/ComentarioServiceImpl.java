@@ -9,6 +9,9 @@ import com.afrivera.blog.repository.PublicacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ComentarioServiceImpl implements ComentarioService{
 
@@ -30,6 +33,18 @@ public class ComentarioServiceImpl implements ComentarioService{
         Comentario nuevoComentario = comentarioRepository.save(comentario);
 
         return mapearDto(nuevoComentario);
+    }
+
+    @Override
+    public List<ComentarioDto> obtenerComentarioPorPublicacionId(long publicacionId) {
+        List<Comentario> comentarios = comentarioRepository.findByPublicacionId(publicacionId);
+
+        return comentarios.stream().map(comentario -> mapearDto(comentario)).collect(Collectors.toList());
+    }
+
+    @Override
+    public ComentarioDto obtenerComentarioPorId(Long publicacionId, Long comentarioId) {
+        return null;
     }
 
     private ComentarioDto mapearDto(Comentario comentario){
