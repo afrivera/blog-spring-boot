@@ -37,4 +37,15 @@ public class ComentarioController {
         ComentarioDto comentarioDto = comentarioService.obtenerComentarioPorId(publicacionId, comentarioId);
         return new ResponseEntity<>(comentarioDto, HttpStatus.OK);
     }
+
+    @PutMapping("/publicaciones/{publicacionId}/comentarios/{comentarioId}")
+    public ResponseEntity<ComentarioDto> actualizarComentario(
+            @PathVariable(value = "publicacionId") long publicacionId,
+            @PathVariable(value = "comentarioId") long comentarioId,
+            @RequestBody ComentarioDto comentarioDto
+    ){
+        ComentarioDto comentarioActualizado = comentarioService.actualizarComentario(publicacionId, comentarioId, comentarioDto);
+
+        return new ResponseEntity<>(comentarioActualizado, HttpStatus.OK);
+    }
 }
