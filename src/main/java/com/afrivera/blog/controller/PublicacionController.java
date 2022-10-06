@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/publicaciones")
 public class PublicacionController {
@@ -31,12 +33,12 @@ public class PublicacionController {
     }
 
     @PostMapping
-    public ResponseEntity<PublicacionDto> savePublicacion(@RequestBody PublicacionDto publicacionDto) {
+    public ResponseEntity<PublicacionDto> savePublicacion(@Valid @RequestBody PublicacionDto publicacionDto) {
         return new ResponseEntity<>(publicacionService.crearPublicacion(publicacionDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PublicacionDto> actualizarPublicacion(@RequestBody PublicacionDto publicacionDto, @PathVariable(name = "id") long id) {
+    public ResponseEntity<PublicacionDto> actualizarPublicacion(@Valid @RequestBody PublicacionDto publicacionDto, @PathVariable(name = "id") long id) {
         PublicacionDto publicacionRespuesta = publicacionService.actualizarPublicacion(publicacionDto, id);
 
         return new ResponseEntity<>(publicacionRespuesta, HttpStatus.OK);
