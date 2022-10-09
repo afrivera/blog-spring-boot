@@ -20,32 +20,42 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails andres = User.builder().username("andres").password(passwordEncoder().encode("password")).roles("USER").build();
-        UserDetails admin = User.builder().username("admin").password(passwordEncoder().encode("admin")).roles("ADMIN").build();
+    public UserDetailsService userDetailsService() {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        manager.createUser(User.withUsername("andres")
+                .password(passwordEncoder().encode("password"))
+                .roles("USER")
+                .build());
+        manager.createUser(User.withUsername("admin")
+                .password(passwordEncoder().encode("admin"))
+                .roles("ADMIN")
+                .build());
 
-        return new InMemoryUserDetailsManager(andres, admin);
+        return manager;
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**").permitAll()
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/api/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .httpBasic();
-
-        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return (web)-> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
     }
 
 }

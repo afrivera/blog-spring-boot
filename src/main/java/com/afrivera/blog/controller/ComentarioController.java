@@ -5,6 +5,7 @@ import com.afrivera.blog.service.ComentarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ public class ComentarioController {
     @Autowired
     private ComentarioService comentarioService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/publicaciones/{publicacionId}/comentarios")
     public ResponseEntity<ComentarioDto> guardarComentario(
             @PathVariable(value = "publicacionId") long publicacionId,
@@ -39,6 +41,7 @@ public class ComentarioController {
         return new ResponseEntity<>(comentarioDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/publicaciones/{publicacionId}/comentarios/{comentarioId}")
     public ResponseEntity<ComentarioDto> actualizarComentario(
             @PathVariable(value = "publicacionId") long publicacionId,
@@ -50,6 +53,7 @@ public class ComentarioController {
         return new ResponseEntity<>(comentarioActualizado, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("publicaciones/{publicacionId}/comentarios/{comentarioId}")
     public ResponseEntity<String> eliminarComentario(
             @PathVariable(value = "publicacionId") long publicacionId,
