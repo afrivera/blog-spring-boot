@@ -6,6 +6,8 @@ import com.afrivera.blog.entity.Role;
 import com.afrivera.blog.entity.Usuario;
 import com.afrivera.blog.repository.RoleRepository;
 import com.afrivera.blog.repository.UsuarioRepository;
+import com.afrivera.blog.security.JwtAuthResponseDTO;
+import com.afrivera.blog.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +39,17 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
     @PostMapping("/login")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+    public ResponseEntity<JwtAuthResponseDTO> authenticateUser(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("Ha iniciado Sesión con exíto", HttpStatus.OK);
+
+        // obtenemos el token del provider
+        String token = jwtTokenProvider.generarToken(authentication);
+        return ResponseEntity.ok(new JwtAuthResponseDTO(token));
     }
 
     @PostMapping("/register")
